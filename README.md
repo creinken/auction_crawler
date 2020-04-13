@@ -1,8 +1,6 @@
 # AuctionCrawler
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/auction_crawler`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This is a fairly simple CLI application that will get auction house data from the WoW API, parse it and allow a user to search through it. Please refer to the Usage section for a list of commands
 
 ## Installation
 
