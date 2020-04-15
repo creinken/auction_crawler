@@ -5,8 +5,12 @@ class Item
     @@all = []
 
     #### Instance Methods ####
-    def initialize
+    def initialize(item_hash)
+        item_hash.each {|key, value| self.send(("#{key}="), value)}
+    end
 
+    def save
+        self.class.all << self
     end
 
     #### Class Methods####
@@ -22,7 +26,9 @@ class Item
         end
     end
 
-    def self.create()
-
+    def self.create(item_hash)
+        new_item = self.new(item_hash)
+        new_item.save
+        new_item
     end
 end
