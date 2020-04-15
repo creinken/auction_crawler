@@ -1,6 +1,8 @@
-class AuctionItem
+class Item
 
     #### Attributes ####
+
+    @@all = []
 
     #### Instance Methods ####
     def initialize
@@ -8,5 +10,5 @@ class AuctionItem
     end
 
     #### Class Methods####
-
+    
 end

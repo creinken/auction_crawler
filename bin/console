@@ -11,4 +11,6 @@ require "auction_crawler"
 # Pry.start
 
 require "irb"
-IRB.start(__FILE__)
+
+
+# IRB.start(__FILE__)
