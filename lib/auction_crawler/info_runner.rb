@@ -35,7 +35,7 @@ class InfoRunner
         Net::HTTP.get_response(uri)
     end
 
-    def find_or_create_item_by_id
+    def get_item_by_id
 
     end
 
