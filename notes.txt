@@ -79,12 +79,12 @@ connected realm api call return format
 auction api call return format
     {
     "_links": {
-    "self": {
-      "href": "https://us.api.blizzard.com/data/wow/connected-realm/1146/auctions?namespace=dynamic-us"
-    }
+        "self": {
+            "href": "https://us.api.blizzard.com/data/wow/connected-realm/1146/auctions?namespace=dynamic-us"
+        }
     },
     "connected_realm": {
-    "href": "https://us.api.blizzard.com/data/wow/connected-realm/1146?namespace=dynamic-us"
+        "href": "https://us.api.blizzard.com/data/wow/connected-realm/1146?namespace=dynamic-us"
     },
     "auctions": [
     {
