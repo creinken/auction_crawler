@@ -6,8 +6,7 @@ class Auction
     #### Instance Methods ####
     def initialize
         runner = InfoRunner.new
-        @auction_list = runner.get_auction_list
-        puts JSON.parse(@auction_list.body)
+        @auction_list = JSON.parse(runner.get_auction_list.body)
     end
 
     #### Class Methods####

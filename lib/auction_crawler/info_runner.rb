@@ -5,7 +5,7 @@ class InfoRunner
 
     #### Instance Methods ####
     def initialize
-        @token = get_token
+        @token = JSON.parse(get_token.body)
         @region = "us"
         @connectedRealmId = 1146
         @namespace = "dynamic-us"
@@ -14,9 +14,12 @@ class InfoRunner
     end
 
     def get_token
+        #### the code below should be equivalent to the following curl ####
+        # curl -u {57afd6363525481c996bc55483249d5c}:{wKH18WdIQfV7Fb4W5m1qg8JU1HwI5iuQ} -d grant_type=client_credentials https://us.battle.net/oauth/token
+
         uri = URI.parse("https://us.battle.net/oauth/token")
         request = Net::HTTP::Post.new(uri)
-        request.basic_auth("{57afd6363525481c996bc55483249d5c}", "{wKH18WdIQfV7Fb4W5m1qg8JU1HwI5iuQ}")
+        request.basic_auth("57afd6363525481c996bc55483249d5c", "wKH18WdIQfV7Fb4W5m1qg8JU1HwI5iuQ")
         request.set_form_data(
           "grant_type" => "client_credentials",
         )
@@ -32,11 +35,14 @@ class InfoRunner
 
     def get_auction_list
         uri = URI.parse("https://#{@region}.api.blizzard.com/data/wow/connected-realm/#{@connectedRealmId}/auctions?namespace=#{@namespace}&locale=#{@locale}&access_token=#{token['access_token']}")
-        Net::HTTP.get_response(uri)
+        auction_list = Net::HTTP.get_response(uri)
+        JSON.parse(auction_list.body)
     end
 
-    def get_item_by_id
-
+    def get_item_by_id(item_id)
+        uri = URI.parse("https://#{@region}.api.blizzard.com/data/wow/item/#{item_id}?namespace=static-us&locale=#{@locale}&access_token=#{token['access_token']}")
+        item = Net::HTTP.get_response(uri)
+        JSON.parse(item.body)
     end
 
     #### Class Methods####
