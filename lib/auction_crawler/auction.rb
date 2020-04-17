@@ -8,7 +8,6 @@ class Auction
         @runner = InfoRunner.new
         @auction_list = runner.get_auction_list
         self.create_items_from_auction_list
-        self.menu
     end
 
     def create_items_from_auction_list
@@ -20,27 +19,25 @@ class Auction
 
     def display_list(idx1=0, idx2=9)
         @current_displayed_items = AuctionItem.all[idx1..idx2]
-        @current_displayed_items.each do |item|
-            puts "#{idx1+1}) #{item.name} #{item.subclass} #{item.level}"
+        @current_displayed_items.each_with_index do |item, inx|
+            puts "#{inx+1}) #{item.name} #{item.item_subclass} #{item.level}"
         end
     end
 
-    def menu
+    def call
         input = nil
-        until input == "/[eE]/xit"
+        self.display_list
+        until input == 'exit'
             puts "Please type a command or number of item you wish to see more detail on."
-            input = validate_input(gets)
-
-            case input
-            when 1..10
-                display_item(@current_displayed_items[input-1])
+            input = gets
+            if input.to_i != 0
+                case input.to_i
+                when 1..10
+                    display_item(@current_displayed_items[input.to_i-1])
+                else
+                    puts "Invalid input"
+                end
             end
-        end
-    end
-
-    def validate_input(usr_input)
-        if usr_input <= 0 || usr_input > 10
-            puts "Invalid choice."
         end
     end
 

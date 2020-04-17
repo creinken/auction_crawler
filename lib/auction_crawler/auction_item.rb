@@ -41,7 +41,6 @@ class AuctionItem
         # save to save instance to array of all instances and returns instance object
         new_item = self.new(item_hash)
         new_item.save
-        puts "Created #{new_item}"
         new_item
     end
 end
