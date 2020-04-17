@@ -25,10 +25,10 @@ class AuctionItem
     def self.find_or_create_by_id(auction_id, item_hash)
         # calls find_by_id, tests the result, if it found the item returns it,
         # if find_by_id returned nil then it creates the item with the supplied hash
-        if find_by_id(auction_id).nil?
-            self.create(item_hash)
+        if AuctionItem.find_by_id(auction_id).nil?
+            AuctionItem.create(item_hash)
         else
-            find_by_id(auction_id)
+            AuctionItem.find_by_id(auction_id)
         end
     end
 
@@ -41,6 +41,7 @@ class AuctionItem
         # save to save instance to array of all instances and returns instance object
         new_item = self.new(item_hash)
         new_item.save
+        puts "Created #{new_item}"
         new_item
     end
 end

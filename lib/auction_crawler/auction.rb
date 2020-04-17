@@ -1,20 +1,20 @@
 class Auction
 
     #### Attributes ####
-    attr_accessor :auction_list, :character_list, :current_displayed_items
+    attr_accessor :auction_list, :character_list, :current_displayed_items, :runner
 
     #### Instance Methods ####
     def initialize
-        runner = InfoRunner.new
+        @runner = InfoRunner.new
         @auction_list = runner.get_auction_list
-        create_items_from_auction_list
-        # menu
+        self.create_items_from_auction_list
+        self.menu
     end
 
     def create_items_from_auction_list
         # create items from @auction_list
-        @auction_list["auctions"].each do |list_item|
-            AuctionItem.find_or_create_by_id(list_item["id"],list_item["item"]["id"])
+        @auction_list["auctions"].take(10).each do |list_item|
+            AuctionItem.find_or_create_by_id(list_item['id'],@runner.get_item_by_id(list_item['item']['id']))
         end
     end
 
