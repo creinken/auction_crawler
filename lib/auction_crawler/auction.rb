@@ -72,7 +72,9 @@ class Auction
     def next_10_items
         @current_displayed_items[0] += 10
         @current_displayed_items[1] += 10
-        if AuctionItem.all.length <= @current_displayed_items[1]
+        if AuctionItem.all.length < (@current_displayed_items[0] + 1)
+            puts "no more items to display"
+        elsif AuctionItem.all.length <= @current_displayed_items[1]
             @current_displayed_items[1] = AuctionItem.all.length-1
         end
         self.display_list
