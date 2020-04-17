@@ -5,6 +5,9 @@ class Auction
 
     #### Instance Methods ####
     def initialize
+        # call displayed items initialization, create a new InfoRunner, use
+        # runner to get the current auction list from Blizzard and create items
+        # from the auction list
         self.init_dis_items
         @runner = InfoRunner.new
         @auction_list = runner.get_auction_list
@@ -12,29 +15,32 @@ class Auction
     end
 
     def create_items_from_auction_list
-        # create items from @auction_list
+        # create items from @auction_list 10 at a time to minimize initial loading
         @auction_list["auctions"].take(10).each do |list_item|
             AuctionItem.find_or_create_by_id(list_item['id'],@runner.get_item_by_id(list_item['item']['id']))
         end
     end
 
     def display_list
+        # get a 10 item chunk by index from AuctionItem.all
         AuctionItem.all[@current_displayed_items[0]..@current_displayed_items[1]].each_with_index do |item, inx|
             puts "#{inx+1}) #{item.name} #{item.item_subclass} #{item.level}"
         end
     end
 
     def call
+        # main menu
         input = ""
         self.display_list
         until input == "exit"
             puts "Please type a command or number of item you wish to see more detail on."
             puts "Type list for a list of available commands."
             input = gets.chomp
-            if input.to_i != 0
-                case input.to_i
+            int_input = input.to_i
+            if int_input != 0
+                case int_input
                 when 1..10
-                    display_item(@current_displayed_items[input.to_i-1])
+                    self.display_item(self.get_cdi[int_input-1])
                 else
                     puts "Invalid input"
                 end
@@ -54,13 +60,15 @@ class Auction
     end
 
     def display_item(item)
-        puts "#{item.name}   #{item.level}"
-        puts "#{item.item_class}"
-        puts "#{item.item_subclass}"
-        puts "#{item.quality}"
+        # display a formated more detailed listing of the given auction item
+        puts "Name: #{item.name}   Item Level: #{item.level}"
+        puts "Item Class: #{item.item_class}"
+        puts "Item Subclass: #{item.item_subclass}"
+        puts "Quality: #{item.quality}"
     end
 
     def display_commands
+        # displays all the currently viable commands
         puts "1-10 - picks an item to view more details"
         puts "list - display this list of commands"
         puts "next - display the next 10 auction items"
@@ -70,8 +78,13 @@ class Auction
     end
 
     def next_10_items
+        # adjust stored indexes of the currently displayed items to be the next
+        # 10 items
         @current_displayed_items[0] += 10
         @current_displayed_items[1] += 10
+
+        # check to see if there are any more items in the AuctionItem.all list.
+        # if there aren't set the stored index array back to what it was.
         if AuctionItem.all.length < (@current_displayed_items[0] + 1)
             puts "no more items to display"
             @current_displayed_items[0] -= 10
@@ -83,8 +96,13 @@ class Auction
     end
 
     def previous_10_items
+        # adjust stored indexes of the currently displayed items to be the previous
+        # 10 items
         @current_displayed_items[0] -= 10
         @current_displayed_items[1] -= 10
+
+        # check to see if the stored index number is less than 0 and therefore
+        # out of bounds. if so reinitialize stored index array.
         if @current_displayed_items[0] < 0
             self.init_dis_items
         end
@@ -92,9 +110,13 @@ class Auction
     end
 
     def init_dis_items
+        #creates stored index array used for displaying auction items
         @current_displayed_items = [0,9]
     end
 
-    #### Class Methods####
+    def get_cdi
+        # gets a 10 item chunk of auction items from all the auction items
+        AuctionItem.all[@current_displayed_items[0]..@current_displayed_items[1]]
+    end
 
 end
