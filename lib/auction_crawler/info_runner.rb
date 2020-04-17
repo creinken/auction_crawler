@@ -5,6 +5,7 @@ class InfoRunner
 
     #### Instance Methods ####
     def initialize
+        # get token and set major api call attributes
         @token = JSON.parse(get_token.body)
         @region = "us"
         @connectedRealmId = 1146
@@ -34,12 +35,15 @@ class InfoRunner
     end
 
     def get_auction_list
+        # call blizzard auction api get request, parse json into hash and return
         uri = URI.parse("https://#{@region}.api.blizzard.com/data/wow/connected-realm/#{@connectedRealmId}/auctions?namespace=#{@namespace}&locale=#{@locale}&access_token=#{token['access_token']}")
         auction_list = Net::HTTP.get_response(uri)
         JSON.parse(auction_list.body)
     end
 
     def get_item_by_id(item_id)
+        # call blizzard item info api get request using supplied item id, parse
+        # the returned information and creates and returns an item hash
         uri = URI.parse("https://#{@region}.api.blizzard.com/data/wow/item/#{item_id}?namespace=static-us&locale=#{@locale}&access_token=#{token['access_token']}")
         item = Net::HTTP.get_response(uri)
         item_json = JSON.parse(item.body)
@@ -51,7 +55,4 @@ class InfoRunner
             :item_subclass => item_json["item_subclass"]["name"]
         }
     end
-
-    #### Class Methods####
-
 end
