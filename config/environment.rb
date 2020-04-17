@@ -1,0 +1,8 @@
+require "open-uri"
+require "net/http"
+require "json"
+require "pry"
+require_relative "../lib/auction_crawler/version"
+require_relative "../lib/auction_crawler/info_runner"
+require_relative "../lib/auction_crawler/auction_item"
+require_relative "../lib/auction_crawler/auction"
