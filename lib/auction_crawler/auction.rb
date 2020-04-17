@@ -11,19 +11,25 @@ class Auction
         self.init_dis_items
         @runner = InfoRunner.new
         @auction_list = runner.get_auction_list
-        self.create_items_from_auction_list
+        self.find_or_create_items_from_auction_list
     end
 
-    def create_items_from_auction_list
+    def find_or_create_items_from_auction_list(idx1=0,idx2=9)
         # create items from @auction_list 10 at a time to minimize initial loading
-        @auction_list["auctions"].take(10).each do |list_item|
+        self.auctions[idx1..idx2].each do |list_item|
             AuctionItem.find_or_create_by_id(list_item['id'],@runner.get_item_by_id(list_item['item']['id']))
         end
+        AuctionItem.all[idx1..idx2]
+    end
+
+    def auctions
+        # return the "auctions" array of hashes from @auction_list
+        @auction_list["auctions"]
     end
 
     def display_list
         # get a 10 item chunk by index from AuctionItem.all
-        AuctionItem.all[@current_displayed_items[0]..@current_displayed_items[1]].each_with_index do |item, inx|
+        self.find_or_create_items_from_auction_list[@current_displayed_items[0]..@current_displayed_items[1]].each_with_index do |item, inx|
             puts "#{inx+1}) #{item.name} #{item.item_subclass} #{item.level}"
         end
     end
@@ -85,12 +91,12 @@ class Auction
 
         # check to see if there are any more items in the AuctionItem.all list.
         # if there aren't set the stored index array back to what it was.
-        if AuctionItem.all.length < (@current_displayed_items[0] + 1)
+        if self.auctions.length < (@current_displayed_items[0] + 1)
             puts "no more items to display"
             @current_displayed_items[0] -= 10
             @current_displayed_items[1] -= 10
-        elsif AuctionItem.all.length <= @current_displayed_items[1]
-            @current_displayed_items[1] = AuctionItem.all.length-1
+        elsif self.auctions.length <= @current_displayed_items[1]
+            @current_displayed_items[1] = self.auctions.length-1
             self.display_list
         end
     end
